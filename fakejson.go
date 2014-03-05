@@ -11,6 +11,20 @@ type Profile struct {
 	Hobbies []string
 }
 
+type Linechart struct {
+}
+
+type Piechardata struct {
+	Titre       string
+	Actions     int
+	Fonds       int
+	Obligations int
+	Liquidites  int
+}
+
+type Areachart struct {
+}
+
 func main() {
 	http.HandleFunc("/", foo)
 	http.ListenAndServe(":3000", nil)
