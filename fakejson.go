@@ -44,6 +44,33 @@ func createtvg() Tvg {
 	return Tvg{Profil: p, Montantinitial: m1, Montantdate: m2, Apportsretraits: a1, Apportsretraitsdate: a2}
 }
 
+type Tvgp struct {
+	Unmoisperf    int `json:"unmoisperf"`
+	Unmoispmv     int `json:"unmoispmv"`
+	Troismoisperf int `json:"troismoisperf"`
+	Troismoispmv  int `json:"troismoispmv"`
+	Unanperf      int `json:"unanperf"`
+	Unanpmv       int `json:"unanpmv"`
+	Troisansperf  int `json:"troisansperf"`
+	Troisanspmv   int `json:"troisanspmv"`
+	Creationperf  int `json:"creationperf"`
+	Creationpmv   int `json:"creationpmv"`
+}
+
+func createtvgp() Tvgp {
+	u1 := randInt(5, 15)
+	u2 := randInt(500, 1500)
+	t1 := randInt(5, 15)
+	t2 := randInt(500, 1500)
+	a1 := randInt(50, 150)
+	a2 := randInt(5000, 15000)
+	r1 := randInt(50, 150)
+	r2 := randInt(5000, 15000)
+	c1 := randInt(500, 1500)
+	c2 := randInt(50000, 150000)
+	return Tvgp{Unmoisperf: u1, Unmoispmv: u2, Troismoisperf: t1, Troismoispmv: t2, Unanperf: a1, Unanpmv: a2, Troisansperf: r1, Troisanspmv: r2, Creationperf: c1, Creationpmv: c2}
+}
+
 func randInt(min int, max int) int {
 	return min + rand.Intn(max-min)
 }
@@ -55,6 +82,8 @@ func apis(w http.ResponseWriter, r *http.Request) {
 	switch api {
 	case "tvg":
 		o = createtvg()
+	case "tvgp":
+		o = createtvgp()
 	default:
 		o = "Error: " + api + " (no api with this name)"
 	}
