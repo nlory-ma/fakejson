@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -71,6 +72,26 @@ func createtvgp() Tvgp {
 	return Tvgp{Unmoisperf: u1, Unmoispmv: u2, Troismoisperf: t1, Troismoispmv: t2, Unanperf: a1, Unanpmv: a2, Troisansperf: r1, Troisanspmv: r2, Creationperf: c1, Creationpmv: c2}
 }
 
+type Lineactif struct {
+	N string `json:"n"`
+	E string `json:"e"`
+	V int    `json:"v"`
+	W int    `json:"w"`
+	D string `json:"d"`
+}
+
+func createlineactif(name string, num bool, eta string) Lineactif {
+	n := name
+	if num {
+		n += " n°" + strconv.Itoa(randInt(1001, 9999))
+	}
+	e := eta
+	v := randInt(10000, 200000)
+	w := randInt(10000, 200000)
+	d := strconv.Itoa(randInt(10, 28)) + "/" + strconv.Itoa(randInt(10, 12)) + "/2013"
+	return Lineactif{N: n, E: e, V: v, W: w, D: d}
+}
+
 func randInt(min int, max int) int {
 	return min + rand.Intn(max-min)
 }
@@ -84,6 +105,20 @@ func apis(w http.ResponseWriter, r *http.Request) {
 		o = createtvg()
 	case "tvgp":
 		o = createtvgp()
+	case "ccs":
+		o = createlineactif("CC", true, "Banque JUMP")
+	case "lces":
+		o = createlineactif("Livret", true, "Banque JUMP")
+	case "cts":
+		o = createlineactif("CT", true, "Banque JUMP")
+	case "avcs":
+		o = createlineactif("Compte VIE", true, "Banque JUMP")
+	case "bus":
+		o = createlineactif("Emprunt", false, "Banque JUMP")
+	case "brs":
+		o = createlineactif("T2 Sentier Paris", false, "Banque JUMP")
+	case "pfs":
+		o = createlineactif("SCPI", false, "Banque JUMP")
 	default:
 		o = "Error: " + api + " (no api with this name)"
 	}
@@ -98,6 +133,5 @@ func apis(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", apis)
-	//http.HandleFunc("/", foo)
 	http.ListenAndServe(":8080", nil)
 }
